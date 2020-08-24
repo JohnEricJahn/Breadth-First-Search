@@ -67,9 +67,10 @@ int main(int argc, char *argv[]) {
 	inserir(&fila, verticeInicial);
 	achou = 0; // Falso
 			
-	while(remover(&fila, &temp) != ERRO_PILHA_VAZIA && achou == 0) {
+	while(remover(&fila, &temp) != ERRO_PILHA_VAZIA) {
 		if(temp == verticeFinal) {
 			achou = 1;
+			break;
 		}
 		
 		for(i=0; i<tam; i++) {
@@ -81,24 +82,24 @@ int main(int argc, char *argv[]) {
 					vetorStatus[i] = 1;
 					vetorAntecessores[i] = temp;
 					inserir(&fila, i);
-				}	
+				}
 			}
 		}
-		
 	}
 	
-	int w;
-	for(w=0; w<tam; w++) {
-		printf("%d\n", vetorAntecessores[w]);
-	}
-	
-	/*
 	if(achou == 1) {
 		inicializa_pilha(&pilha, tam);
-		while(vetorAntecessores[verticeFinal] != 0) {
+		while(verticeFinal != 0) {
+			empilha(&pilha, verticeFinal);
+			verticeFinal = vetorAntecessores[verticeFinal];
 		}
-	}	
-	*/
+		
+		while(desempilha(&pilha, &temp) != ERRO_PILHA_VAZIA) {
+			printf("%d\n", temp+1);
+		}
+	} else {
+		printf("B não é alcançável a partir de A");
+	}
 
 	
 	desaloca_matriz(&matrizAdjacencia);
