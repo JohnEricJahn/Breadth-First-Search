@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #include "Pilha.h"
 #include "Matriz.h"
@@ -9,6 +10,9 @@
 // Alunos: John Eric Jahn && Luiz Guilherme
 
 int main(int argc, char *argv[]) {
+	
+	setlocale(LC_ALL, "Portuguese");
+	
 	Matriz matrizAdjacencia;
 	Pilha pilha;
 	FILE *file;
@@ -16,16 +20,7 @@ int main(int argc, char *argv[]) {
 	int tam, verticeInicial, verticeFinal, i, j, temp, achou;
 	Fila fila;
 	
-	printf("______________________________________________________________________\n");
-	printf("				AVISO!!\n\n");
-	printf("  RESPEITE O TAMANHO DEFINIDO DA MATRIZ COM A QUE ESTA NO ARQUIVO\n");
-	printf("______________________________________________________________________\n\n");
-	
-	printf("Digite o tamanho da matriz: ");
-	scanf("%d", &tam);
-	
-	inicializa_matriz(&matrizAdjacencia, tam, tam);
-	inicializa_fila(&fila, tam);
+	printf("           *BREADTH FIRST SEARCH*            \n");
 	
 	file = fopen("grafos.txt", "r");
 	
@@ -33,6 +28,16 @@ int main(int argc, char *argv[]) {
 		printf("Arquivo nao pode ser aberto\n");
 		return 0;
 	}
+		
+	fscanf(file, "%d", &tam);
+	
+	if(tam < 1) {		
+		printf("O TAMANHO DA MATRIZ (1ª LINHA DO ARQUIVO) DEVE SER MAIOR QUE 0");
+		exit(0);
+	}
+	
+	inicializa_matriz(&matrizAdjacencia, tam, tam);
+	inicializa_fila(&fila, tam);
 	
 	for(i=0; i<tam; i++) {
 		for(j=0; j<tam; j++) {
@@ -55,12 +60,10 @@ int main(int argc, char *argv[]) {
 	memset(vetorAntecessores, 0, sizeof(int) * tam);
 	
 	
-	printf("\nDigite o vertice inicial de busca: ");
-	scanf("%d", &verticeInicial);
+	fscanf(file, "%d", &verticeInicial);
 	verticeInicial = verticeInicial - 1;
 	
-	printf("\nDigite o vertice final de busca: ");
-	scanf("%d", &verticeFinal);
+	fscanf(file,"%d", &verticeFinal);
 	verticeFinal = verticeFinal - 1;
 	
 	vetorStatus[verticeInicial] = 1;
@@ -93,6 +96,8 @@ int main(int argc, char *argv[]) {
 			empilha(&pilha, verticeFinal);
 			verticeFinal = vetorAntecessores[verticeFinal];
 		}
+		
+		printf("\n *********** CAMINHO GERADO *********** \n");
 		
 		while(desempilha(&pilha, &temp) != ERRO_PILHA_VAZIA) {
 			printf("%d\n", temp+1);
